@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -14,7 +16,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     MaterialButton buttonC, buttonBrank;
     MaterialButton buttonDivide, buttonMutiply, buttonPlus, buttonMinus, buttonEquals;
     MaterialButton button0, button1, button2, button3, button4, button5, button6, button7, button8, button9;
-    MaterialButton buttonPDM, buttonComma, buttonPercent;
+    MaterialButton buttonAC, buttonComma, buttonPercent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         assignId(button7, R.id.button_7);
         assignId(button8, R.id.button_8);
         assignId(button9, R.id.button_9);
-        assignId(buttonPDM, R.id.button);
+        assignId(buttonAC, R.id.buttonAC);
         assignId(buttonComma, R.id.button_comma);
         assignId(buttonPercent, R.id.percent_button);
     }
@@ -55,7 +57,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String buttonText = button.getText().toString();
         String dataToCalculate = solutionTV.getText().toString();
 
-        dataToCalculate = dataToCalculate+buttonText;
+        if(buttonText.equals("AC")){
+            solutionTV.setText("");
+            resultVT.setText("0");
+            return;
+        }
+        if(buttonText.equals("=")){
+            solutionTV.setText(resultVT.getText());
+            return;
+        }
+        if(buttonText.equals("C")){
+            dataToCalculate = dataToCalculate.substring(0, dataToCalculate.length()-1);
+        }else {
+            dataToCalculate = dataToCalculate+buttonText;
+        }
         solutionTV.setText(dataToCalculate);
+
+        String finalResult =getResult(dataToCalculate);
+
+        if(!finalResult.equals("Err")){
+            resultVT.setText(finalResult);
+        }
+    }
+
+    String getResult(String data){
+        try {
+            Context context = Context.enter();
+            context.setOptimizationLevel(-1);
+            Scriptable scriptable = context.initStandardObjects();
+            String finalResult = context.evaluateString(scriptable, data,"Javascript", 1, null).toString();
+            if(finalResult.endsWith(".0")){
+                finalResult = finalResult.replace(".0","");
+            }
+            return finalResult;
+        }catch (Exception e){
+            return "Err";
+        }
     }
 }

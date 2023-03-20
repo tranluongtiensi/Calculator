@@ -20,4 +20,5 @@
     <string name="_0">0</string>
     <string name="comma">,</string>
     <string name="equal">=</string>
+    <string name="ac">AC</string>
 </resources>
