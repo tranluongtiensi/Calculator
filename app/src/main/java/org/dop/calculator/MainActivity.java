@@ -2,13 +2,20 @@ package org.dop.calculator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
+
+import org.dop.calculator.databinding.ActivityHistoryBinding;
+import org.dop.calculator.databinding.ActivityMainBinding;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -18,10 +25,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     MaterialButton button0, button1, button2, button3, button4, button5, button6, button7, button8, button9;
     MaterialButton buttonAC, buttonComma, buttonPercent;
 
+    private List<String> history = new ArrayList<String>();
+
+    private ActivityMainBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setListeners();
+
         resultVT = findViewById(R.id.result_tv);
         solutionTV = findViewById(R.id.solution_tv);
 
@@ -45,6 +59,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         assignId(buttonAC, R.id.buttonAC);
         assignId(buttonComma, R.id.button_comma);
         assignId(buttonPercent, R.id.percent_button);
+
+
+    }
+
+    private void setListeners() {
+        binding.historyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), HistoryActivity.class);
+                intent.putStringArrayListExtra("history", (ArrayList<String>)history );
+                startActivity(intent);
+            }
+        });
+//        binding.historyBtn.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), HistoryActivity.class)));
     }
 
     void assignId(MaterialButton btn, int id){
@@ -64,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if(buttonText.equals("=")){
             solutionTV.setText(resultVT.getText());
+            history.add(resultVT.getText().toString());
+
             return;
         }
         if(buttonText.equals("C")){
@@ -73,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         solutionTV.setText(dataToCalculate);
 
-        String finalResult =getResult(dataToCalculate);
+        String finalResult = getResult(dataToCalculate);
 
         if(!finalResult.equals("Err")){
             resultVT.setText(finalResult);

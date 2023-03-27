@@ -21,4 +21,7 @@
     <string name="comma">,</string>
     <string name="equal">=</string>
     <string name="ac">AC</string>
+    <string name="multiply">*</string>
+    <string name="divided">/</string>
+    <string name="clear_history">Clear history</string>
 </resources>
