@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<String> history = new ArrayList<String>();
 
     private ActivityMainBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+
 
     private void setListeners() {
         binding.historyBtn.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             resultVT.setText(finalResult);
         }
     }
+
+
 
     String getResult(String data){
         try {

@@ -42,7 +42,12 @@ public class HistoryActivity extends AppCompatActivity {
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Clear the history list
+                history.clear();
 
+                // Update the list view
+                HistoryAdapter adapter = (HistoryAdapter) historyListView.getAdapter();
+                adapter.notifyDataSetChanged();
             }
         });
     }
